@@ -183,12 +183,13 @@
     },
     "packages/kilo-vscode": {
       "name": "kilo-code",
-      "version": "1.0.21",
+      "version": "7.0.21",
       "dependencies": {
         "@anthropic-ai/sdk": "^0.39.0",
         "@kilocode/kilo-i18n": "file:../kilo-i18n",
         "@kilocode/kilo-ui": "file:../kilo-ui",
         "@kilocode/sdk": "file:../sdk/js",
+        "@opencode-ai/ui": "file:../ui",
         "diff": "^7.0.0",
         "dotenv": "^16.4.7",
         "eventsource": "^2.0.2",
@@ -208,7 +209,7 @@
         "@types/mocha": "^10.0.10",
         "@types/node": "22.x",
         "@types/qrcode": "^1.5.6",
-        "@types/vscode": "^1.109.0",
+        "@types/vscode": "^1.108.0",
         "@vscode/test-cli": "^0.0.12",
         "@vscode/test-electron": "^2.5.2",
         "esbuild": "^0.27.2",

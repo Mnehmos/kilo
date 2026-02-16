@@ -98,6 +98,15 @@ export namespace SessionPrompt {
       ),
     system: z.string().optional(),
     variant: z.string().optional(),
+    editorContext: z
+      .object({
+        visibleFiles: z.array(z.string()).optional(),
+        openTabs: z.array(z.string()).optional(),
+        activeFile: z.string().optional(),
+        shell: z.string().optional(),
+        timezone: z.string().optional(),
+      })
+      .optional(),
     parts: z.array(
       z.discriminatedUnion("type", [
         MessageV2.TextPart.omit({
@@ -638,7 +647,7 @@ export namespace SessionPrompt {
         agent,
         abort,
         sessionID,
-        system: [...(await SystemPrompt.environment(model)), ...(await InstructionPrompt.system())],
+        system: [...(await SystemPrompt.environment(model, lastUser.editorContext)), ...(await InstructionPrompt.system())],
         messages: [
           ...MessageV2.toModelMessages(sessionMessages, model),
           ...(isLastStep
@@ -894,6 +903,7 @@ export namespace SessionPrompt {
       model,
       system: input.system,
       variant,
+      editorContext: input.editorContext,
     }
     using _ = defer(() => InstructionPrompt.clear(info.id))
 

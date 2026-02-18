@@ -387,6 +387,16 @@ export interface ActionMessage {
   action: string
 }
 
+export interface SetChatBoxMessage {
+  type: "setChatBoxMessage"
+  text: string
+}
+
+export interface TriggerTaskMessage {
+  type: "triggerTask"
+  text: string
+}
+
 export interface ProfileDataMessage {
   type: "profileData"
   data: ProfileData | null
@@ -526,6 +536,8 @@ export type ExtensionMessage =
   | ConfigLoadedMessage
   | ConfigUpdatedMessage
   | NotificationSettingsLoadedMessage
+  | SetChatBoxMessage
+  | TriggerTaskMessage
 
 // ============================================
 // Messages FROM webview TO extension

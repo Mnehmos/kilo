@@ -5,6 +5,7 @@ import { EXTENSION_DISPLAY_NAME } from "./constants"
 import { KiloConnectionService } from "./services/cli-backend"
 import { registerAutocompleteProvider } from "./services/autocomplete"
 import { BrowserAutomationService } from "./services/browser-automation"
+import { registerCodeActions, registerTerminalActions, KiloCodeActionProvider } from "./services/code-actions"
 
 export function activate(context: vscode.ExtensionContext) {
   console.log("Kilo Code extension is now active")
@@ -65,6 +66,19 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Register autocomplete provider
   registerAutocompleteProvider(context, connectionService)
+
+  // Register code actions (editor context menus, terminal context menus, keyboard shortcuts)
+  registerCodeActions(context, provider)
+  registerTerminalActions(context, provider)
+
+  // Register CodeActionProvider (lightbulb quick fixes)
+  context.subscriptions.push(
+    vscode.languages.registerCodeActionsProvider(
+      { scheme: "file" },
+      new KiloCodeActionProvider(),
+      KiloCodeActionProvider.metadata,
+    ),
+  )
 
   // Dispose services when extension deactivates (kills the server)
   context.subscriptions.push({

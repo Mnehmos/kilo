@@ -32,7 +32,7 @@ export const PromptInput: Component = () => {
   const isDisabled = () => !server.isConnected()
   const canSend = () => text().trim().length > 0 && !isBusy() && !isDisabled()
 
-  // Listen for chat completion results from the extension
+  // Listen for messages from the extension
   const unsubscribe = vscode.onMessage((message) => {
     if (message.type === "chatCompletionResult") {
       const result = message as { type: "chatCompletionResult"; text: string; requestId: string }
@@ -41,6 +41,27 @@ export const PromptInput: Component = () => {
       if (result.requestId === expectedId && result.text) {
         setGhostText(result.text)
       }
+    }
+
+    // Set the chat input text without sending
+    if (message.type === "setChatBoxMessage") {
+      setText(message.text)
+      setGhostText("")
+      if (textareaRef) {
+        textareaRef.value = message.text
+        adjustHeight()
+      }
+    }
+
+    // Set the text and immediately send it as a new task
+    if (message.type === "triggerTask") {
+      const sel = session.selected()
+      session.sendMessage(message.text, sel?.providerID, sel?.modelID)
+    }
+
+    // Focus the prompt input textarea
+    if (message.type === "action" && message.action === "focusInput") {
+      textareaRef?.focus()
     }
   })
 
